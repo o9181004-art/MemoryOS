@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761117854",
+  "state_summary": {
+    "note": "LLM roundtrip smoke"
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "latency_ms": 3521,
+    "stream": false,
+    "response_preview": "The new MemoryOS update allows users to capture a snapshot of their memories and then gently drift through them like a digital daydream!"
+  },
+  "provenance": {
+    "source": "scripts/llm_roundtrip.py"
+  }
+}

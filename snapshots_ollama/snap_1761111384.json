@@ -1,0 +1,672 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761111384",
+  "timestamp": 1761111384.6610818,
+  "memory_index": {
+    "files": {
+      "data/example.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111384.6495383,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpywo9ii0_\\data\\test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.2942302,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpe6lhx150\\data\\drift_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.5461996,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpc99o88xr\\data\\integrity_test_0.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.5689518,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpc99o88xr\\data\\integrity_test_1.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111177.5796585,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpc99o88xr\\data\\integrity_test_2.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111178.5889337,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmplg137rbn\\data\\snapshot_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.6158714,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpspaxgfc_\\data\\enhanced_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.6379325,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpzclqp6ya\\data\\recovery_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.6583514,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpy1es0rfh\\data\\load_test_0.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.681515,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpy1es0rfh\\data\\load_test_1.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.7014003,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpy1es0rfh\\data\\load_test_2.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.7215767,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpy1es0rfh\\data\\load_test_3.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.7426064,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpy1es0rfh\\data\\load_test_4.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.7662697,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpy1es0rfh\\data\\load_test_5.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.7876453,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpy1es0rfh\\data\\load_test_6.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.807263,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpy1es0rfh\\data\\load_test_7.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.826411,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpy1es0rfh\\data\\load_test_8.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.8459907,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpy1es0rfh\\data\\load_test_9.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111176.8650317,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp4oevxy4g\\data\\test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111257.5785377,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpelo7c7w_\\data\\test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111287.7321,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpmzbbdko1\\data\\test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111310.2810612,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmplafc9tkv\\data\\test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111318.4786904,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp8hd38h29\\data\\test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111327.949887,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpz92fm19k\\data\\test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.125535,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp2yp2jquh\\data\\drift_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.247576,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpffy8v7w_\\data\\integrity_test_0.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.2659092,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpffy8v7w_\\data\\integrity_test_1.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111338.2745512,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpffy8v7w_\\data\\integrity_test_2.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111339.2841334,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpagl1do1a\\data\\snapshot_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.3731072,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmps_e6ss6t\\data\\enhanced_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.3913803,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp5kuteq9l\\data\\recovery_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.4098642,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9iw341qd\\data\\load_test_0.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.4268444,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9iw341qd\\data\\load_test_1.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.445363,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9iw341qd\\data\\load_test_2.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.463654,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9iw341qd\\data\\load_test_3.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.4820333,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9iw341qd\\data\\load_test_4.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.5005045,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9iw341qd\\data\\load_test_5.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.5191734,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9iw341qd\\data\\load_test_6.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.5396001,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9iw341qd\\data\\load_test_7.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.5581508,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9iw341qd\\data\\load_test_8.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.5765514,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9iw341qd\\data\\load_test_9.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111337.5951138,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmppyt28xh3\\data\\test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111364.9742994,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpn7jlsdr7\\data\\drift_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.1126962,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpo_bmm3my\\data\\integrity_test_0.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.1296022,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpo_bmm3my\\data\\integrity_test_1.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111366.1398072,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpo_bmm3my\\data\\integrity_test_2.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111367.1495557,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmplciosojz\\data\\snapshot_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.2610738,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpgchykuoe\\data\\enhanced_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.2856529,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp1go8c0hy\\data\\recovery_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.3021715,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9kxcu56u\\data\\load_test_0.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.3237135,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9kxcu56u\\data\\load_test_1.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.344052,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9kxcu56u\\data\\load_test_2.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.3651276,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9kxcu56u\\data\\load_test_3.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.3941545,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9kxcu56u\\data\\load_test_4.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.4184918,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9kxcu56u\\data\\load_test_5.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.4478881,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9kxcu56u\\data\\load_test_6.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.4706109,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9kxcu56u\\data\\load_test_7.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.494357,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9kxcu56u\\data\\load_test_8.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.5198228,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp9kxcu56u\\data\\load_test_9.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111365.5426736,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpkfqmi0xt\\data\\test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111379.7358363,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp04_3qp6i\\data\\drift_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111379.868565,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpn56kly02\\data\\integrity_test_0.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111379.8876207,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpn56kly02\\data\\integrity_test_1.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.9001937,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpn56kly02\\data\\integrity_test_2.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111381.912033,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpt9cmrjqw\\data\\snapshot_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111379.931957,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpt64o_3up\\data\\enhanced_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111379.958294,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmpqqcpzoy7\\data\\recovery_test.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111379.978902,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp_8veuuxd\\data\\load_test_0.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.0108957,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp_8veuuxd\\data\\load_test_1.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.0366168,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp_8veuuxd\\data\\load_test_2.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.0587234,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp_8veuuxd\\data\\load_test_3.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.080573,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp_8veuuxd\\data\\load_test_4.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.101855,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp_8veuuxd\\data\\load_test_5.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.1228778,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp_8veuuxd\\data\\load_test_6.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.1449401,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp_8veuuxd\\data\\load_test_7.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.1666286,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp_8veuuxd\\data\\load_test_8.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.1888816,
+        "update_interval": 300,
+        "metadata": {}
+      },
+      "C:\\Users\\LeeSG\\AppData\\Local\\Temp\\tmp_8veuuxd\\data\\load_test_9.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111380.2097795,
+        "update_interval": 300,
+        "metadata": {}
+      }
+    },
+    "catalog": {}
+  },
+  "drift_status": {
+    "total_files": 78,
+    "active_files": 78,
+    "stale_files": 0,
+    "error_files": 0,
+    "drift_counts": {
+      "0": 78,
+      "1": 0,
+      "2": 0,
+      "3": 0
+    }
+  },
+  "hash_chain": {
+    "chain_length": 1,
+    "latest_hash": "43aff34f3727ee21bcd648aeb4efd7d2b1807f97661e7cc47c440f19cf94c277",
+    "merkle_root": "0000000000000000000000000000000000000000000000000000000000000000",
+    "integrity_verified": true
+  },
+  "quarantine_status": {
+    "quarantined_files": [],
+    "quarantine_count": 0,
+    "auto_release_candidates": []
+  },
+  "performance_metrics": {
+    "hit_rate": 1.0,
+    "avg_latency_ms": 0.0,
+    "error_rate": 0.0,
+    "drift_levels": {
+      "L1": 0,
+      "L2": 0,
+      "L3": 0
+    }
+  },
+  "system_info": {
+    "version": "1.0.0",
+    "uptime_seconds": 1761111384.6611302,
+    "config_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}

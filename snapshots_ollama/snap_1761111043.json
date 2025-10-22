@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761111043",
+  "timestamp": 1761111043.4789557,
+  "memory_index": {
+    "files": {
+      "data/example.txt": {
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "producer_actual": "unknown",
+        "producer_expected": "unknown",
+        "last_updated": 1761111043.4701,
+        "update_interval": 300,
+        "metadata": {}
+      }
+    },
+    "catalog": {}
+  },
+  "drift_status": {
+    "total_files": 1,
+    "active_files": 1,
+    "stale_files": 0,
+    "error_files": 0,
+    "drift_counts": {
+      "0": 1,
+      "1": 0,
+      "2": 0,
+      "3": 0
+    }
+  },
+  "hash_chain": {
+    "chain_length": 1,
+    "latest_hash": "728369574a50daeada67581e39a17e578df2c0aabb15e9c2b42edfda032b9763",
+    "merkle_root": "0000000000000000000000000000000000000000000000000000000000000000",
+    "integrity_verified": true
+  },
+  "quarantine_status": {
+    "quarantined_files": [],
+    "quarantine_count": 0,
+    "auto_release_candidates": []
+  },
+  "performance_metrics": {
+    "hit_rate": 1.0,
+    "avg_latency_ms": 0.0,
+    "error_rate": 0.0,
+    "drift_levels": {
+      "L1": 0,
+      "L2": 0,
+      "L3": 0
+    }
+  },
+  "system_info": {
+    "version": "1.0.0",
+    "uptime_seconds": 1761111043.478969,
+    "config_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}

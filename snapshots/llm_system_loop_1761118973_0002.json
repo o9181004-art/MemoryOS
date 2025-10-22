@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761118973_2",
+  "state_summary": {
+    "note": "llm_system_loop"
+  },
+  "delta": {
+    "ts": 1761118966.6378407,
+    "event": "delta",
+    "path": "test_data\\rt_0002.txt",
+    "op": "write",
+    "hash": "5f1a6333a206b6e9cb83fd6e22a2a3159b04124d8d36a13fcd04d8004f867da0",
+    "producer_actual": "llm_system_loop",
+    "correlation_id": "corr_5b9f283992ff"
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "latency_ms": 7223,
+    "stream": false,
+    "response_preview": "Acknowledged: A new write event has been recorded in test_data\\rt_0002.txt on MemoryOS, which may indicate potential drift since the last snapshot was taken."
+  },
+  "provenance": {
+    "source": "scripts/llm_system_loop.py"
+  }
+}

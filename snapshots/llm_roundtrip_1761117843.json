@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761117843",
+  "state_summary": {
+    "note": "LLM roundtrip smoke"
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "latency_ms": 3632,
+    "stream": false,
+    "response_preview": "\"With MemoryOS, you can take a snapshot of your current workflow and then drift into different scenarios to test how changes might affect your project.\""
+  },
+  "provenance": {
+    "source": "scripts/llm_roundtrip.py"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761117848",
+  "state_summary": {
+    "note": "LLM roundtrip smoke"
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "latency_ms": 3249,
+    "stream": false,
+    "response_preview": "\"MemoryOS allows you to take snapshots of your digital life and then easily drift back in time to relive cherished moments.\""
+  },
+  "provenance": {
+    "source": "scripts/llm_roundtrip.py"
+  }
+}

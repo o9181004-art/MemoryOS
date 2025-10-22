@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "snapshot_id": "snap_1761106765",
+    "generated_at": 1761106765.218397,
+    "generated_at_iso": "2025-10-22T13:19:25.218397",
+    "version": "1.0",
+    "schema_type": "memoryos_snapshot"
+  },
+  "state_summary": {
+    "total_files": 1,
+    "active_files": 1,
+    "stale_files": 0,
+    "error_files": 0,
+    "total_operations": 2,
+    "catalog_info": {
+      "total_files": 0,
+      "total_modules": 0,
+      "active_files": 0,
+      "version": "1.0"
+    },
+    "last_system_update": 1761106765.2176287
+  },
+  "recent_deltas": [
+    {
+      "timestamp": 1761106765.2173789,
+      "delta": {
+        "path": "data/example.txt",
+        "op": "write",
+        "hash": "",
+        "ts": 1761106765.2173789,
+        "producer_actual": "module_A"
+      },
+      "prev_hash": null,
+      "curr_hash": "15b36942f1bc9b3a12ee14072816e7c3367b74cf931ddcd385f683d58934ce2a"
+    }
+  ],
+  "provenance": {
+    "chain_length": 1,
+    "merkle_root": "bdd300adc25f3c05563551560dfff92ef2a80c65cea3f1415033065abeb1cf1b",
+    "chain_integrity": true,
+    "last_block_hash": "bdd300adc25f3c05563551560dfff92ef2a80c65cea3f1415033065abeb1cf1b",
+    "first_block_timestamp": 1761106765.2173789,
+    "last_block_timestamp": 1761106765.2173789
+  },
+  "system_health": {
+    "health_score": 100,
+    "health_status": "excellent",
+    "issues": [],
+    "recommendations": []
+  },
+  "file_status": {
+    "data/example.txt": {
+      "status": "active",
+      "version": 2,
+      "last_updated": 1761106765.2173789,
+      "operation_count": 2,
+      "current_hash": "",
+      "last_operation": {
+        "operation": "write",
+        "timestamp": 1761106765.2173789,
+        "producer": "module_A",
+        "hash": "",
+        "chain_hash": "15b36942f1bc9b3a12ee14072816e7c3367b74cf931ddcd385f683d58934ce2a"
+      }
+    }
+  }
+}

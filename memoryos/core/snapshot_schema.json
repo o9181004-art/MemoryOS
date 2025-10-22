@@ -1,0 +1,271 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MemoryOS Snapshot Schema",
+  "description": "MemoryOS 스냅샷 데이터의 JSON 스키마",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "스키마 버전",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "examples": ["1.0.0", "1.1.0", "2.0.0"]
+    },
+    "snapshot_id": {
+      "type": "string",
+      "description": "스냅샷 고유 식별자",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "number",
+      "description": "스냅샷 생성 시간 (Unix timestamp)",
+      "minimum": 0
+    },
+    "memory_index": {
+      "type": "object",
+      "description": "메모리 인덱스 데이터",
+      "properties": {
+        "files": {
+          "type": "object",
+          "description": "파일별 메모리 인덱스",
+          "patternProperties": {
+            ".*": {
+              "type": "object",
+              "properties": {
+                "hash": {
+                  "type": "string",
+                  "description": "파일 해시",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "producer_actual": {
+                  "type": "string",
+                  "description": "실제 생산자",
+                  "minLength": 1
+                },
+                "producer_expected": {
+                  "type": "string",
+                  "description": "예상 생산자",
+                  "minLength": 1
+                },
+                "last_updated": {
+                  "type": "number",
+                  "description": "마지막 업데이트 시간",
+                  "minimum": 0
+                },
+                "update_interval": {
+                  "type": "integer",
+                  "description": "업데이트 주기 (초)",
+                  "minimum": 1
+                },
+                "metadata": {
+                  "type": "object",
+                  "description": "추가 메타데이터"
+                }
+              },
+              "required": ["hash", "producer_actual", "producer_expected", "last_updated"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "catalog": {
+          "type": "object",
+          "description": "데이터 카탈로그",
+          "patternProperties": {
+            ".*": {
+              "type": "object",
+              "properties": {
+                "producer_expected": {
+                  "type": "string",
+                  "description": "예상 생산자",
+                  "minLength": 1
+                },
+                "consumer_expected": {
+                  "type": "array",
+                  "description": "예상 소비자 목록",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "update_interval": {
+                  "type": "integer",
+                  "description": "업데이트 주기 (초)",
+                  "minimum": 1
+                }
+              },
+              "required": ["producer_expected", "consumer_expected"],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "required": ["files"],
+      "additionalProperties": false
+    },
+    "drift_status": {
+      "type": "object",
+      "description": "Drift 상태 정보",
+      "properties": {
+        "total_files": {
+          "type": "integer",
+          "description": "전체 파일 수",
+          "minimum": 0
+        },
+        "active_files": {
+          "type": "integer",
+          "description": "활성 파일 수",
+          "minimum": 0
+        },
+        "stale_files": {
+          "type": "integer",
+          "description": "오래된 파일 수",
+          "minimum": 0
+        },
+        "error_files": {
+          "type": "integer",
+          "description": "오류 파일 수",
+          "minimum": 0
+        },
+        "drift_counts": {
+          "type": "object",
+          "description": "Drift 레벨별 카운트",
+          "properties": {
+            "0": {"type": "integer", "minimum": 0},
+            "1": {"type": "integer", "minimum": 0},
+            "2": {"type": "integer", "minimum": 0},
+            "3": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["total_files", "active_files", "stale_files", "error_files", "drift_counts"],
+      "additionalProperties": false
+    },
+    "hash_chain": {
+      "type": "object",
+      "description": "Hash Chain 정보",
+      "properties": {
+        "chain_length": {
+          "type": "integer",
+          "description": "체인 길이",
+          "minimum": 0
+        },
+        "latest_hash": {
+          "type": "string",
+          "description": "최신 해시",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "merkle_root": {
+          "type": "string",
+          "description": "Merkle 루트 해시",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "integrity_verified": {
+          "type": "boolean",
+          "description": "무결성 검증 상태"
+        }
+      },
+      "required": ["chain_length", "latest_hash", "merkle_root", "integrity_verified"],
+      "additionalProperties": false
+    },
+    "quarantine_status": {
+      "type": "object",
+      "description": "격리 상태 정보",
+      "properties": {
+        "quarantined_files": {
+          "type": "array",
+          "description": "격리된 파일 목록",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "quarantine_count": {
+          "type": "integer",
+          "description": "격리된 파일 수",
+          "minimum": 0
+        },
+        "auto_release_candidates": {
+          "type": "array",
+          "description": "자동 해제 후보 파일 목록",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": ["quarantined_files", "quarantine_count", "auto_release_candidates"],
+      "additionalProperties": false
+    },
+    "performance_metrics": {
+      "type": "object",
+      "description": "성능 메트릭",
+      "properties": {
+        "hit_rate": {
+          "type": "number",
+          "description": "히트율",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "avg_latency_ms": {
+          "type": "number",
+          "description": "평균 지연시간 (밀리초)",
+          "minimum": 0
+        },
+        "error_rate": {
+          "type": "number",
+          "description": "오류율",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "drift_levels": {
+          "type": "object",
+          "description": "Drift 레벨별 통계",
+          "properties": {
+            "L1": {"type": "integer", "minimum": 0},
+            "L2": {"type": "integer", "minimum": 0},
+            "L3": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["hit_rate", "avg_latency_ms", "error_rate", "drift_levels"],
+      "additionalProperties": false
+    },
+    "system_info": {
+      "type": "object",
+      "description": "시스템 정보",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "MemoryOS 버전",
+          "minLength": 1
+        },
+        "uptime_seconds": {
+          "type": "number",
+          "description": "가동 시간 (초)",
+          "minimum": 0
+        },
+        "config_hash": {
+          "type": "string",
+          "description": "설정 파일 해시",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": ["version", "uptime_seconds", "config_hash"],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "snapshot_id",
+    "timestamp",
+    "memory_index",
+    "drift_status",
+    "hash_chain",
+    "quarantine_status",
+    "performance_metrics",
+    "system_info"
+  ],
+  "additionalProperties": false
+}
+

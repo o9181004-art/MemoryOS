@@ -1,0 +1,47 @@
+# MemoryOS Configuration File
+
+[system]
+version = "1.0"
+debug = false
+log_level = "INFO"
+
+[paths]
+watch_paths = ["data/", "config/"]
+catalog_file = "data/catalog.json"
+memory_index_file = "data/memory_index.json"
+snapshot_dir = "snapshots"
+backup_dir = "backups"
+quarantine_dir = "quarantine"
+log_dir = "logs"
+
+[drift_thresholds]
+l1_threshold = 30    # 30 seconds
+l2_threshold = 300   # 5 minutes  
+l3_threshold = 1800  # 30 minutes
+
+[monitoring]
+enabled = true
+interval = 1.0
+max_file_size = 104857600  # 100MB
+
+[policy]
+max_heal_attempts = 3
+heal_cooldown_seconds = 60
+enable_quarantine = true
+enable_backup = true
+
+[signing]
+enable_signing = false
+private_key_file = "keys/private_key.pem"
+public_key_file = "keys/public_key.pem"
+
+[storage]
+type = "sqlite"  # "sqlite" or "json"
+max_connections = 10
+timeout = 30
+
+[metrics]
+window_size = 1000
+calculation_interval = 60
+anomaly_detection = true
+export_interval = 3600

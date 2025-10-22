@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761118591_10",
+  "state_summary": {
+    "note": "llm_system_loop"
+  },
+  "delta": {
+    "ts": 1761118584.549796,
+    "event": "delta",
+    "path": "test_data\\rt_0010.txt",
+    "op": "write",
+    "hash": "339a7b1cb0edf178761e1e1bb60f73ce5f2a14c18b6c5df26174dcf6003af6fc",
+    "producer_actual": "llm_system_loop",
+    "correlation_id": "corr_8d301e5511ea"
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "latency_ms": 6592,
+    "stream": false,
+    "response_preview": "\"Received delta event for test_data\\rt_0010.txt write operation, verifying against MemoryOS state to detect potential drift; next step is to take a snapshot of the updated data.\""
+  },
+  "provenance": {
+    "source": "scripts/llm_system_loop.py"
+  }
+}

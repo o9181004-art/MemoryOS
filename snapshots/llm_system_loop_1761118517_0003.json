@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761118517_3",
+  "state_summary": {
+    "note": "llm_system_loop"
+  },
+  "delta": {
+    "ts": 1761118512.4069521,
+    "event": "delta",
+    "path": "test_data\\rt_0003.txt",
+    "op": "write",
+    "hash": "108a500e8286fe4ca5c0829778a58eb4d9e52328858109b3e95cfea44c668b9f",
+    "producer_actual": "llm_system_loop",
+    "correlation_id": "corr_339953567b28"
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "latency_ms": 5531,
+    "stream": false,
+    "response_preview": "\"Verified delta event for test_data\\rt_0003.txt: write operation confirmed by MemoryOS, no significant drift detected; current snapshot updated.\""
+  },
+  "provenance": {
+    "source": "scripts/llm_system_loop.py"
+  }
+}

@@ -1,0 +1,20 @@
+[runtime]
+mode = "production"
+readonly_on_failure = true
+
+[storage]
+backend = "sqlite"
+path = "data_ollama/memoryos.db"
+wal_enabled = true
+
+[llm]
+provider = "ollama"
+endpoint = "http://127.0.0.1:11434/api/generate"
+model = "llama3"
+stream = false
+timeout = 60
+
+
+
+
+

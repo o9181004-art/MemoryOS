@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761118539_5",
+  "state_summary": {
+    "note": "llm_system_loop"
+  },
+  "delta": {
+    "ts": 1761118529.5488741,
+    "event": "delta",
+    "path": "test_data\\rt_0005.txt",
+    "op": "write",
+    "hash": "167076376b99f8f95e13cdf93c50a7d36ee9732f9644c2c37c25071d3d9606ec",
+    "producer_actual": "llm_system_loop",
+    "correlation_id": "corr_c328f1d9f28e"
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "latency_ms": 10114,
+    "stream": false,
+    "response_preview": "\"MemoryOS has verified the write event to test_data\\rt_0005.txt with hash 167076376b99f8f95e13cdf93c50a7d36ee9732f9644c2c37c25071d3d9606ec, ensuring consistency across all snapshots and preventing drift.\""
+  },
+  "provenance": {
+    "source": "scripts/llm_system_loop.py"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761118511_2",
+  "state_summary": {
+    "note": "llm_system_loop"
+  },
+  "delta": {
+    "ts": 1761118501.3420634,
+    "event": "delta",
+    "path": "test_data\\rt_0002.txt",
+    "op": "write",
+    "hash": "10f283923133b50865b695250776842124818de1a0fdde6794290ab1ca971753",
+    "producer_actual": "llm_system_loop",
+    "correlation_id": "corr_bf8e655bc103"
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "latency_ms": 10062,
+    "stream": false,
+    "response_preview": "\"Verified: Delta event received for path test_data\\rt_0002.txt, confirming write operation with hash 10f283923133b50865b695250776842124818de1a0fdde6794290ab1ca971753 in MemoryOS, ensuring data consistency and monitoring potential drift from snapshots.\""
+  },
+  "provenance": {
+    "source": "scripts/llm_system_loop.py"
+  }
+}

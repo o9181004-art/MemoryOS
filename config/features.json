@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "features": {
+    "enable_drift_detection": true,
+    "enable_self_healing": true,
+    "enable_quarantine": true,
+    "enable_backup": true,
+    "enable_signing": false,
+    "enable_metrics": true,
+    "enable_snapshot_export": true,
+    "enable_wal_mode": true,
+    "enable_idempotency": true,
+    "enable_producer_trust": true,
+    "enable_adaptive_thresholds": true,
+    "enable_merkle_verification": true,
+    "enable_atomic_transactions": true
+  },
+  "timestamp": 1761116543.5492396
+}

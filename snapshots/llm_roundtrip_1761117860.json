@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761117860",
+  "state_summary": {
+    "note": "LLM roundtrip smoke"
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "latency_ms": 3701,
+    "stream": false,
+    "response_preview": "Using MemoryOS, I can take a snapshot of your current workflow and prevent any changes from drifting away by saving it as a stable reference point."
+  },
+  "provenance": {
+    "source": "scripts/llm_roundtrip.py"
+  }
+}

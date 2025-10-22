@@ -1,0 +1,27 @@
+{
+  "test_name": "MemoryOS Policy Comparison",
+  "total_iterations": 5,
+  "total_scenarios": 3,
+  "total_tests": 30,
+  "policy_a": {
+    "name": "Conservative Policy",
+    "total_tests": 15,
+    "avg_execution_time_ms": 1.9370873769124348,
+    "success_rate": 1.0,
+    "drift_detection_rate": 1.0,
+    "error_rate": 0.0
+  },
+  "policy_b": {
+    "name": "Aggressive Policy",
+    "total_tests": 15,
+    "avg_execution_time_ms": 1.2229442596435547,
+    "success_rate": 1.0,
+    "drift_detection_rate": 1.0,
+    "error_rate": 0.0
+  },
+  "performance_comparison": {
+    "execution_time_improvement": 36.8668510145974,
+    "success_rate_improvement": 0.0,
+    "drift_detection_improvement": 0.0
+  }
+}

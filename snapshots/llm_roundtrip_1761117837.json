@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "snap_1761117837",
+  "state_summary": {
+    "note": "LLM roundtrip smoke"
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3",
+    "latency_ms": 3321,
+    "stream": false,
+    "response_preview": "\"With MemoryOS, you can effortlessly create snapshots of your digital life and avoid losing important data as you drift through cyberspace.\""
+  },
+  "provenance": {
+    "source": "scripts/llm_roundtrip.py"
+  }
+}
