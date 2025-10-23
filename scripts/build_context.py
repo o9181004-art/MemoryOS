@@ -23,10 +23,10 @@ Key Features:
 import os
 import sqlite3
 import json
-import time
 import re
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime, timedelta
+from pathlib import Path
 
 # Enforce strict read-only mode
 READ_ONLY = True
@@ -41,6 +41,13 @@ MAX_CHARS = int(os.getenv("MEMORYOS_CONTEXT_MAXCHARS", "1200"))
 EMBEDDINGS_ENABLED = os.getenv("MEMORYOS_EMBEDDINGS", "false").lower() == "true"
 SIM_THRESHOLD = float(os.getenv("MEMORYOS_SIM_THRESHOLD", "0.5"))
 DB_PATH = os.getenv("MEMORYOS_DB", "./data_ollama/memoryos.db")
+
+# L1 Activation & Hybrid Scoring Configuration
+L1_WEIGHT = float(os.getenv("MEMORYOS_L1_WEIGHT", "0.65"))   # 0~1
+L0_WEIGHT = 1.0 - L1_WEIGHT
+ADAPTIVE_ON = os.getenv("MEMORYOS_ADAPTIVE_THRESHOLD", "true").lower()=="true"
+MIN_SIM = float(os.getenv("MEMORYOS_SIM_THRESHOLD_MIN", "0.45"))
+MAX_SIM = float(os.getenv("MEMORYOS_SIM_THRESHOLD_MAX", "0.60"))
 
 # Sensitive data masking patterns
 MASK_PATTERNS = [
@@ -317,9 +324,59 @@ def get_embedding(text: str) -> Optional[List[float]]:
         return None
 
 
+def _adaptive_threshold(k:int, base:float)->float:
+    """
+    Simple heuristic: more candidates → require slightly higher confidence
+    """
+    if not ADAPTIVE_ON: return base
+    adj = min(MAX_SIM, max(MIN_SIM, base + 0.02 * max(0, k-3)))
+    return adj
+
+def _similarity_guard(user_input:str, items:List[Dict])->Tuple[bool, List[Tuple[Dict,float]]]:
+    """
+    L1 similarity guard with adaptive thresholding
+    """
+    if not EMBEDDINGS_ENABLED or not items:
+        return True, [(it, 0.0) for it in items]
+    try:
+        from scripts.embeddings import cosine_sim, get_emb
+        qv = get_emb(user_input)
+        scored = []
+        for it in items:
+            text = json.dumps(it.get("data", {}) or {}, ensure_ascii=False)[:512]
+            sim = cosine_sim(qv, get_emb(text))
+            scored.append((it, sim))
+        scored.sort(key=lambda x: x[1], reverse=True)
+        threshold = _adaptive_threshold(len(items), SIM_THRESHOLD)
+        ok = scored[0][1] >= threshold
+        return ok, scored
+    except Exception:
+        return True, [(it, 0.0) for it in items]
+
+def _hybrid_sort(user_input:str, items:List[Dict], l1_scored:List[Tuple[Dict,float]])->List[Dict]:
+    """
+    L0+L1 hybrid scoring for final sorting
+    """
+    # L0 score: keyword-based scoring
+    keys = [w for w in re.findall(r"[A-Za-z0-9가-힣_]+", user_input) if len(w)>=2][:3]
+    def l0_score(it:Dict)->int:
+        dj = it.get("data", {})
+        hay = (it.get("type","") + " " + json.dumps(dj, ensure_ascii=False)).lower()
+        return sum(1 for k in keys if k.lower() in hay)
+    
+    l1_map = {id(it): sim for it, sim in l1_scored}
+    enriched = []
+    for it in items:
+        s0 = l0_score(it)
+        s1 = l1_map.get(id(it), 0.0)
+        hybrid = L0_WEIGHT * s0 + L1_WEIGHT * s1
+        enriched.append((hybrid, it))
+    enriched.sort(key=lambda x: x[0], reverse=True)
+    return [it for _, it in enriched]
+
 def build_context_with_embeddings(user_input: str) -> Optional[str]:
     """
-    Enhanced context building with semantic similarity (L1).
+    Enhanced context building with hybrid L0+L1 scoring and adaptive thresholding.
     
     Args:
         user_input: User's input text
@@ -330,32 +387,21 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
     if not EMBEDDINGS_ENABLED:
         return build_context_l0(user_input)
     
-    # Get user input embedding
-    user_embedding = get_embedding(user_input)
-    if not user_embedding:
-        return build_context_l0(user_input)  # Fallback to L0
-    
     # Get recent events
     events = get_recent_events(DB_PATH, LAST_MINUTES, LAST_K_EVENTS)
     if not events:
         return None
     
-    # Calculate similarity scores
-    scored_events = []
-    for event in events:
-        event_text = json.dumps(event.get('data', {}))
-        event_embedding = get_embedding(event_text)
-        
-        if event_embedding:
-            similarity = cosine_similarity(user_embedding, event_embedding)
-            if similarity >= SIM_THRESHOLD:
-                scored_events.append((event, similarity))
+    # Apply similarity guard with adaptive thresholding
+    ok, l1_scored = _similarity_guard(user_input, events)
+    if not ok: 
+        return None
     
-    # Sort by similarity score
-    scored_events.sort(key=lambda x: x[1], reverse=True)
+    # Apply hybrid L0+L1 sorting
+    events = _hybrid_sort(user_input, events, l1_scored)
     
     # Take top results
-    relevant_events = [event for event, score in scored_events[:TOP_K_RESULTS]]
+    relevant_events = events[:TOP_K_RESULTS]
     
     if not relevant_events:
         return None
@@ -375,6 +421,18 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
     context_body = '\n'.join(context_lines)
     if len(context_body) > MAX_CHARS:
         context_body = context_body[:MAX_CHARS] + "..."
+    
+    # Log telemetry
+    try:
+        import time
+        from pathlib import Path
+        Path("./logs").mkdir(exist_ok=True)
+        top_sim = l1_scored[0][1] if l1_scored else 0.0
+        Path("./logs/memoryos_metrics.log").write_text(
+            f"[{time.time():.0f}] l1=on sim_top={top_sim:.3f}\n", encoding="utf-8"
+        )
+    except Exception:
+        pass
     
     return f"[CONTEXT WINDOW]\n{context_body}\n[END CONTEXT]"
 
