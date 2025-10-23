@@ -24,6 +24,7 @@ import os
 import sqlite3
 import json
 import re
+import time
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -222,7 +223,7 @@ def format_event_summary(event: Dict) -> str:
 
 def build_context_l0(user_input: str) -> Optional[str]:
     """
-    Build context string for LLM prompt injection (L0 - no embeddings) with Reinjection (Round-7), Self-Healing (Round-9), and Adaptive Reasoning (Round-10).
+    Build context string for LLM prompt injection (L0 - no embeddings) with Reinjection (Round-7), Self-Healing (Round-9), Adaptive Reasoning (Round-10), and Meta-Learning (Round-12).
     
     Args:
         user_input: User's input text
@@ -230,7 +231,21 @@ def build_context_l0(user_input: str) -> Optional[str]:
     Returns:
         Context string to prepend to prompt, or None if no context should be injected
     """
-    global _HEAL_COUNTER, _INSIGHT_COUNTER
+    global _HEAL_COUNTER, _INSIGHT_COUNTER, _LAST_POLICY_UPDATE
+    
+    # Round-12: Meta-Learning Policy Update
+    if META_LEARNING_ENABLED:
+        current_time = time.time()
+        if current_time - _LAST_POLICY_UPDATE > 3600:  # 60 minutes
+            try:
+                from scripts.meta_learning import run_meta_learning
+                run_meta_learning()
+                _LAST_POLICY_UPDATE = current_time
+                # Log meta-learning activity (already logged in meta_learning.py)
+            except ImportError:
+                pass  # Graceful fallback if module not available
+            except Exception:
+                pass  # Continue even if meta-learning fails
     
     # Round-9: Self-Healing Graph Maintenance
     if HEALING_ENABLED:
@@ -489,7 +504,7 @@ def _fetch_candidates(user_input: str) -> List[Dict]:
 def build_context_with_embeddings(user_input: str) -> Optional[str]:
     """
     Enhanced context building with hybrid L0+L1 scoring, adaptive thresholding,
-    Memory Aging, Summarization (Round-5), Context Reinjection (Round-7), Memory Graph (Round-8), Self-Healing (Round-9), and Adaptive Reasoning (Round-10).
+    Memory Aging, Summarization (Round-5), Context Reinjection (Round-7), Memory Graph (Round-8), Self-Healing (Round-9), Adaptive Reasoning (Round-10), and Meta-Learning (Round-12).
     
     Args:
         user_input: User's input text
@@ -497,7 +512,21 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
     Returns:
         Context string or None
     """
-    global _HEAL_COUNTER, _INSIGHT_COUNTER
+    global _HEAL_COUNTER, _INSIGHT_COUNTER, _LAST_POLICY_UPDATE
+    
+    # Round-12: Meta-Learning Policy Update
+    if META_LEARNING_ENABLED:
+        current_time = time.time()
+        if current_time - _LAST_POLICY_UPDATE > 3600:  # 60 minutes
+            try:
+                from scripts.meta_learning import run_meta_learning
+                run_meta_learning()
+                _LAST_POLICY_UPDATE = current_time
+                # Log meta-learning activity (already logged in meta_learning.py)
+            except ImportError:
+                pass  # Graceful fallback if module not available
+            except Exception:
+                pass  # Continue even if meta-learning fails
     
     # Round-9: Self-Healing Graph Maintenance
     if HEALING_ENABLED:
@@ -636,7 +665,7 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
         from pathlib import Path as PathLib
         PathLib("./logs").mkdir(exist_ok=True)
         PathLib("./logs/memoryos_metrics.log").write_text(
-            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'} graph={'on' if GRAPH_ENABLED else 'off'} heal={'on' if HEALING_ENABLED else 'off'} reasoning={'on' if REASONING_ENABLED else 'off'} governance={'on' if GOVERNANCE_ENABLED else 'off'}\n", 
+            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'} graph={'on' if GRAPH_ENABLED else 'off'} heal={'on' if HEALING_ENABLED else 'off'} reasoning={'on' if REASONING_ENABLED else 'off'} governance={'on' if GOVERNANCE_ENABLED else 'off'} meta={'on' if META_LEARNING_ENABLED else 'off'}\n", 
             encoding="utf-8"
         )
     except Exception:
@@ -668,6 +697,10 @@ _INSIGHT_INTERVAL = int(os.getenv("MEMORYOS_INSIGHT_INTERVAL", "50"))
 
 # Round-11: Governance & Safety Configuration
 GOVERNANCE_ENABLED = os.getenv("MEMORYOS_GOVERNANCE_ENABLED", "true").lower() == "true"
+
+# Round-12: Meta-Learning Configuration
+META_LEARNING_ENABLED = os.getenv("MEMORYOS_META_LEARNING_ENABLED", "true").lower() == "true"
+_LAST_POLICY_UPDATE = time.time()
 
 def process_llm_proposal(proposal_text: str, user_input: str) -> Tuple[bool, str]:
     """
