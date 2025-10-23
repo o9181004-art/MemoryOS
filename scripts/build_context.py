@@ -222,7 +222,7 @@ def format_event_summary(event: Dict) -> str:
 
 def build_context_l0(user_input: str) -> Optional[str]:
     """
-    Build context string for LLM prompt injection (L0 - no embeddings) with Reinjection (Round-7).
+    Build context string for LLM prompt injection (L0 - no embeddings) with Reinjection (Round-7) and Self-Healing (Round-9).
     
     Args:
         user_input: User's input text
@@ -230,6 +230,21 @@ def build_context_l0(user_input: str) -> Optional[str]:
     Returns:
         Context string to prepend to prompt, or None if no context should be injected
     """
+    global _HEAL_COUNTER
+    
+    # Round-9: Self-Healing Graph Maintenance
+    if HEALING_ENABLED:
+        _HEAL_COUNTER += 1
+        if _HEAL_COUNTER % _HEAL_INTERVAL == 0:
+            try:
+                from scripts.self_healing_graph import run_full_healing_cycle
+                run_full_healing_cycle()
+                # Log healing activity (already logged in self_healing_graph.py)
+            except ImportError:
+                pass  # Graceful fallback if module not available
+            except Exception:
+                pass  # Continue even if healing fails
+    
     # Check if context injection is enabled (check each time for runtime changes)
     if os.getenv("MEMORYOS_CONTEXT_ENABLED", "false").lower() != "true":
         return None
@@ -428,7 +443,7 @@ def _fetch_candidates(user_input: str) -> List[Dict]:
 def build_context_with_embeddings(user_input: str) -> Optional[str]:
     """
     Enhanced context building with hybrid L0+L1 scoring, adaptive thresholding,
-    Memory Aging, Summarization (Round-5), and Context Reinjection (Round-7).
+    Memory Aging, Summarization (Round-5), Context Reinjection (Round-7), Memory Graph (Round-8), and Self-Healing (Round-9).
     
     Args:
         user_input: User's input text
@@ -436,6 +451,21 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
     Returns:
         Context string or None
     """
+    global _HEAL_COUNTER
+    
+    # Round-9: Self-Healing Graph Maintenance
+    if HEALING_ENABLED:
+        _HEAL_COUNTER += 1
+        if _HEAL_COUNTER % _HEAL_INTERVAL == 0:
+            try:
+                from scripts.self_healing_graph import run_full_healing_cycle
+                run_full_healing_cycle()
+                # Log healing activity (already logged in self_healing_graph.py)
+            except ImportError:
+                pass  # Graceful fallback if module not available
+            except Exception:
+                pass  # Continue even if healing fails
+    
     if not EMBEDDINGS_ENABLED:
         return build_context_l0(user_input)
     
@@ -514,7 +544,7 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
         from pathlib import Path as PathLib
         PathLib("./logs").mkdir(exist_ok=True)
         PathLib("./logs/memoryos_metrics.log").write_text(
-            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'} graph={'on' if GRAPH_ENABLED else 'off'}\n", 
+            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'} graph={'on' if GRAPH_ENABLED else 'off'} heal={'on' if HEALING_ENABLED else 'off'}\n", 
             encoding="utf-8"
         )
     except Exception:
@@ -533,6 +563,11 @@ REINJECTION_ENABLED = os.getenv("MEMORYOS_REINJECTION_ENABLED", "true").lower() 
 
 # Round-8: Memory Graph Configuration
 GRAPH_ENABLED = os.getenv("MEMORYOS_GRAPH_ENABLED", "true").lower() == "true"
+
+# Round-9: Self-Healing Graph Configuration
+HEALING_ENABLED = os.getenv("MEMORYOS_HEALING_ENABLED", "true").lower() == "true"
+_HEAL_COUNTER = 0
+_HEAL_INTERVAL = int(os.getenv("MEMORYOS_HEAL_INTERVAL", "100"))
 
 def process_llm_proposal(proposal_text: str, user_input: str) -> Tuple[bool, str]:
     """
