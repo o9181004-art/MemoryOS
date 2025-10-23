@@ -222,7 +222,7 @@ def format_event_summary(event: Dict) -> str:
 
 def build_context_l0(user_input: str) -> Optional[str]:
     """
-    Build context string for LLM prompt injection (L0 - no embeddings).
+    Build context string for LLM prompt injection (L0 - no embeddings) with Reinjection (Round-7).
     
     Args:
         user_input: User's input text
@@ -274,7 +274,21 @@ def build_context_l0(user_input: str) -> Optional[str]:
     if len(context_body) > MAX_CHARS:
         context_body = context_body[:MAX_CHARS] + "..."
     
-    return f"[CONTEXT WINDOW]\n{context_body}\n[END CONTEXT]"
+    # Round-7: Add Context Reinjection
+    reinjected_context = ""
+    if REINJECTION_ENABLED:
+        try:
+            from scripts.context_reinjection import reinject_context
+            reinjected_context = reinject_context(user_input)
+        except ImportError:
+            pass  # Graceful fallback if module not available
+    
+    # Combine contexts
+    full_context = context_body
+    if reinjected_context:
+        full_context += "\n\n" + reinjected_context
+    
+    return f"[CONTEXT WINDOW]\n{full_context}\n[END CONTEXT]"
 
 
 def cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
@@ -403,7 +417,7 @@ def _fetch_candidates(user_input: str) -> List[Dict]:
 def build_context_with_embeddings(user_input: str) -> Optional[str]:
     """
     Enhanced context building with hybrid L0+L1 scoring, adaptive thresholding,
-    Memory Aging, and Summarization (Round-5).
+    Memory Aging, Summarization (Round-5), and Context Reinjection (Round-7).
     
     Args:
         user_input: User's input text
@@ -458,25 +472,42 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
     if len(context_body) > MAX_CHARS:
         context_body = context_body[:MAX_CHARS] + "..."
     
+    # Round-7: Add Context Reinjection
+    reinjected_context = ""
+    if REINJECTION_ENABLED:
+        try:
+            from scripts.context_reinjection import reinject_context
+            reinjected_context = reinject_context(user_input)
+        except ImportError:
+            pass  # Graceful fallback if module not available
+    
+    # Combine contexts
+    full_context = context_body
+    if reinjected_context:
+        full_context += "\n\n" + reinjected_context
+    
     # Log telemetry
     try:
         import time
         from pathlib import Path
         Path("./logs").mkdir(exist_ok=True)
         Path("./logs/memoryos_metrics.log").write_text(
-            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'}\n", 
+            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'}\n", 
             encoding="utf-8"
         )
     except Exception:
         pass
     
-    return f"[CONTEXT WINDOW]\n{context_body}\n[END CONTEXT]"
+    return f"[CONTEXT WINDOW]\n{full_context}\n[END CONTEXT]"
 
 
 # Main entry point - automatically chooses L0 or L1 based on configuration
 # Round-6: Validator Integration Configuration
 VALIDATOR_ENABLED = os.getenv("MEMORYOS_VALIDATOR_ENABLED", "true").lower() == "true"
 PROPOSAL_PREFIX = os.getenv("MEMORYOS_PROPOSAL_PREFIX", "suggestion:")
+
+# Round-7: Context Reinjection Configuration
+REINJECTION_ENABLED = os.getenv("MEMORYOS_REINJECTION_ENABLED", "true").lower() == "true"
 
 def process_llm_proposal(proposal_text: str, user_input: str) -> Tuple[bool, str]:
     """
