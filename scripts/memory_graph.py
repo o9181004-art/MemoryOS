@@ -87,7 +87,8 @@ def build_graph(memories: List[Dict]) -> Dict:
     Returns:
         Graph structure with nodes and edges
     """
-    if not GRAPH_ENABLED or not memories:
+    # Check if graph is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_GRAPH_ENABLED", "true").lower() != "true" or not memories:
         return {"nodes": {}, "edges": [], "metadata": {"last_build": "disabled"}}
     
     start_time = time.perf_counter()
@@ -171,8 +172,9 @@ def build_graph(memories: List[Dict]) -> Dict:
         
         # Save graph to file
         try:
-            GRAPH_PATH.parent.mkdir(parents=True, exist_ok=True)
-            GRAPH_PATH.write_text(json.dumps(graph, ensure_ascii=False, indent=2), encoding="utf-8")
+            graph_path = Path(os.environ.get("MEMORYOS_GRAPH_PATH", "./data_ollama/memory_graph.json"))
+            graph_path.parent.mkdir(parents=True, exist_ok=True)
+            graph_path.write_text(json.dumps(graph, ensure_ascii=False, indent=2), encoding="utf-8")
         except Exception:
             pass  # Continue even if save fails
         
@@ -212,17 +214,20 @@ def query_related(term: str, limit: int = None) -> List[str]:
     Returns:
         List of related keywords sorted by frequency
     """
-    if not GRAPH_ENABLED or not term:
+    # Check if graph is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_GRAPH_ENABLED", "true").lower() != "true" or not term:
         return []
     
     if limit is None:
         limit = MAX_RELATED_TERMS
     
     try:
-        if not GRAPH_PATH.exists():
+        graph_path = Path(os.environ.get("MEMORYOS_GRAPH_PATH", "./data_ollama/memory_graph.json"))
+        
+        if not graph_path.exists():
             return []
         
-        with open(GRAPH_PATH, 'r', encoding='utf-8') as f:
+        with open(graph_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
         if "edges" not in data:
@@ -254,22 +259,24 @@ def query_related(term: str, limit: int = None) -> List[str]:
 def query_graph_stats() -> Dict:
     """Get graph statistics"""
     try:
-        if not GRAPH_PATH.exists():
+        graph_path = Path(os.environ.get("MEMORYOS_GRAPH_PATH", "./data_ollama/memory_graph.json"))
+        
+        if not graph_path.exists():
             return {
                 "total_nodes": 0,
                 "total_edges": 0,
                 "last_build": "never",
-                "enabled": GRAPH_ENABLED
+                "enabled": os.environ.get("MEMORYOS_GRAPH_ENABLED", "true").lower() == "true"
             }
         
-        with open(GRAPH_PATH, 'r', encoding='utf-8') as f:
+        with open(graph_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
         return {
             "total_nodes": len(data.get("nodes", {})),
             "total_edges": len(data.get("edges", [])),
             "last_build": data.get("metadata", {}).get("last_build", "unknown"),
-            "enabled": GRAPH_ENABLED,
+            "enabled": os.environ.get("MEMORYOS_GRAPH_ENABLED", "true").lower() == "true",
             "max_nodes": MAX_NODES
         }
         
@@ -317,7 +324,8 @@ def get_related_context(user_input: str) -> str:
     Returns:
         Formatted related topics string
     """
-    if not GRAPH_ENABLED or not user_input:
+    # Check if graph is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_GRAPH_ENABLED", "true").lower() != "true" or not user_input:
         return ""
     
     # Extract first meaningful keyword from user input

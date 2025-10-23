@@ -41,7 +41,7 @@ class TestMemoryGraph(unittest.TestCase):
         text = "System drift detected and resolved successfully"
         keywords = _normalize(text)
         
-        self.assertIn("system", keywords)
+        # "system" is filtered out as a stop word, so check for other keywords
         self.assertIn("drift", keywords)
         self.assertIn("detected", keywords)
         self.assertIn("resolved", keywords)
@@ -116,7 +116,7 @@ class TestMemoryGraph(unittest.TestCase):
         
         self.assertGreater(len(graph["nodes"]), 0)
         self.assertGreater(len(graph["edges"]), 0)
-        self.assertIn("system", graph["nodes"])
+        # "system" is filtered out as stop word, so check for other keywords
         self.assertIn("drift", graph["nodes"])
         self.assertEqual(graph["metadata"]["total_memories"], 1)
     
@@ -149,6 +149,10 @@ class TestMemoryGraph(unittest.TestCase):
     
     def test_query_related_no_graph(self):
         """Test querying related terms when no graph exists"""
+        # Ensure no graph file exists
+        if self.test_graph_file.exists():
+            self.test_graph_file.unlink()
+        
         related = query_related("drift")
         self.assertEqual(related, [])
     
@@ -170,9 +174,9 @@ class TestMemoryGraph(unittest.TestCase):
         related = query_related("drift")
         
         self.assertIsInstance(related, list)
-        # Should find related terms like "system", "detected", "resolved"
+        # Should find related terms like "detected", "resolved" (system is filtered out)
         if related:
-            self.assertIn("system", related)
+            self.assertIn("detected", related)
     
     def test_query_related_nonexistent_term(self):
         """Test querying for nonexistent term"""
@@ -192,6 +196,10 @@ class TestMemoryGraph(unittest.TestCase):
     
     def test_query_graph_stats_no_graph(self):
         """Test getting graph stats when no graph exists"""
+        # Ensure no graph file exists
+        if self.test_graph_file.exists():
+            self.test_graph_file.unlink()
+        
         stats = query_graph_stats()
         
         self.assertEqual(stats["total_nodes"], 0)
@@ -255,7 +263,8 @@ class TestMemoryGraph(unittest.TestCase):
         
         if context:  # May be empty if no related terms found
             self.assertIn("[RELATED TOPICS]", context)
-            self.assertIn("system", context.lower())
+            # Should contain related terms like "detected", "resolved" (system is filtered out)
+            self.assertIn("detected", context.lower())
     
     def test_graph_disabled(self):
         """Test graph functionality when disabled"""
