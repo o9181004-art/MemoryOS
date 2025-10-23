@@ -83,7 +83,7 @@ def extract_trends(g: Dict) -> List[str]:
         trending_topics = []
         for topic, data in nodes.items():
             count = data.get("count", 0)
-            if count > avg_count * TREND_FACTOR:
+            if count > avg_count * TREND_FACTOR and count > 1:  # Must have at least 2 occurrences
                 trending_topics.append(topic)
         
         # Generate trend insights
@@ -137,13 +137,13 @@ def detect_anomalies(g: Dict) -> List[str]:
         
         # Find nodes with very few connections
         total_nodes = len(nodes)
-        if total_nodes > 1:
-            avg_connections = sum(node_connections.values()) / total_nodes
+        if total_nodes > 1 and node_connections:
+            avg_connections = sum(node_connections.values()) / len(node_connections)
             isolated_topics = []
             
             for topic in nodes.keys():
                 connections = node_connections.get(topic, 0)
-                if connections < avg_connections * 0.3 and connections > 0:  # Some connections but below average
+                if connections < avg_connections * 0.5 and connections >= 0:  # Below average connections
                     isolated_topics.append(topic)
             
             for topic in isolated_topics[:2]:  # Limit to top 2 isolated topics
@@ -225,7 +225,8 @@ def generate_insights() -> Dict:
     Returns:
         Dictionary with insight generation results
     """
-    if not REASONING_ENABLED:
+    # Check if reasoning is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_REASONING_ENABLED", "true").lower() != "true":
         return {"status": "disabled", "insights": []}
     
     start_time = time.perf_counter()
@@ -273,7 +274,8 @@ def summarize_insights() -> str:
     Returns:
         Formatted insight text for LLM prompt
     """
-    if not REASONING_ENABLED:
+    # Check if reasoning is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_REASONING_ENABLED", "true").lower() != "true":
         return ""
     
     try:
@@ -312,7 +314,7 @@ def get_reasoning_stats() -> Dict:
         g = _load_graph()
         
         return {
-            "enabled": REASONING_ENABLED,
+            "enabled": os.environ.get("MEMORYOS_REASONING_ENABLED", "true").lower() == "true",
             "total_nodes": len(g.get("nodes", {})),
             "total_edges": len(g.get("edges", [])),
             "insight_max": INSIGHT_MAX,
@@ -323,7 +325,7 @@ def get_reasoning_stats() -> Dict:
         
     except Exception:
         return {
-            "enabled": REASONING_ENABLED,
+            "enabled": os.environ.get("MEMORYOS_REASONING_ENABLED", "true").lower() == "true",
             "total_nodes": 0,
             "total_edges": 0,
             "insight_max": INSIGHT_MAX,
@@ -342,7 +344,8 @@ def analyze_user_context(user_input: str) -> str:
     Returns:
         Context-specific insights
     """
-    if not REASONING_ENABLED or not user_input:
+    # Check if reasoning is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_REASONING_ENABLED", "true").lower() != "true" or not user_input:
         return ""
     
     try:

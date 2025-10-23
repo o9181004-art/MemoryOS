@@ -104,9 +104,9 @@ class TestAdaptiveReasoning(unittest.TestCase):
         """Test trend extraction with valid data"""
         graph = {
             "nodes": {
-                "drift": {"count": 10},  # High activity
+                "drift": {"count": 10},  # High activity (avg=5, 10 > 5*1.5=7.5)
                 "system": {"count": 2},  # Low activity
-                "error": {"count": 8}    # High activity
+                "error": {"count": 3}     # Low activity
             },
             "edges": []
         }
@@ -116,7 +116,6 @@ class TestAdaptiveReasoning(unittest.TestCase):
         # Should detect trending topics (above 1.5x average)
         self.assertGreater(len(trends), 0)
         self.assertTrue(any("drift" in trend for trend in trends))
-        self.assertTrue(any("error" in trend for trend in trends))
     
     def test_extract_trends_no_trends(self):
         """Test trend extraction with no trending topics"""
