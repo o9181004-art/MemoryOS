@@ -283,10 +283,21 @@ def build_context_l0(user_input: str) -> Optional[str]:
         except ImportError:
             pass  # Graceful fallback if module not available
     
+    # Round-8: Add Memory Graph Related Topics
+    related_context = ""
+    if GRAPH_ENABLED:
+        try:
+            from scripts.memory_graph import get_related_context
+            related_context = get_related_context(user_input)
+        except ImportError:
+            pass  # Graceful fallback if module not available
+    
     # Combine contexts
     full_context = context_body
     if reinjected_context:
         full_context += "\n\n" + reinjected_context
+    if related_context:
+        full_context += "\n\n" + related_context
     
     return f"[CONTEXT WINDOW]\n{full_context}\n[END CONTEXT]"
 
@@ -481,18 +492,29 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
         except ImportError:
             pass  # Graceful fallback if module not available
     
+    # Round-8: Add Memory Graph Related Topics
+    related_context = ""
+    if GRAPH_ENABLED:
+        try:
+            from scripts.memory_graph import get_related_context
+            related_context = get_related_context(user_input)
+        except ImportError:
+            pass  # Graceful fallback if module not available
+    
     # Combine contexts
     full_context = context_body
     if reinjected_context:
         full_context += "\n\n" + reinjected_context
+    if related_context:
+        full_context += "\n\n" + related_context
     
     # Log telemetry
     try:
         import time
-        from pathlib import Path
-        Path("./logs").mkdir(exist_ok=True)
-        Path("./logs/memoryos_metrics.log").write_text(
-            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'}\n", 
+        from pathlib import Path as PathLib
+        PathLib("./logs").mkdir(exist_ok=True)
+        PathLib("./logs/memoryos_metrics.log").write_text(
+            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'} graph={'on' if GRAPH_ENABLED else 'off'}\n", 
             encoding="utf-8"
         )
     except Exception:
@@ -508,6 +530,9 @@ PROPOSAL_PREFIX = os.getenv("MEMORYOS_PROPOSAL_PREFIX", "suggestion:")
 
 # Round-7: Context Reinjection Configuration
 REINJECTION_ENABLED = os.getenv("MEMORYOS_REINJECTION_ENABLED", "true").lower() == "true"
+
+# Round-8: Memory Graph Configuration
+GRAPH_ENABLED = os.getenv("MEMORYOS_GRAPH_ENABLED", "true").lower() == "true"
 
 def process_llm_proposal(proposal_text: str, user_input: str) -> Tuple[bool, str]:
     """
