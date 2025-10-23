@@ -65,7 +65,8 @@ def integrity_scan() -> Dict:
     Returns:
         Dictionary with scan results
     """
-    if not HEALING_ENABLED:
+    # Check if healing is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_HEALING_ENABLED", "true").lower() != "true":
         return {"status": "disabled"}
     
     start_time = time.perf_counter()
@@ -132,7 +133,8 @@ def reweight_confidence() -> Dict:
     Returns:
         Dictionary with reweighting results
     """
-    if not HEALING_ENABLED:
+    # Check if healing is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_HEALING_ENABLED", "true").lower() != "true":
         return {"status": "disabled"}
     
     start_time = time.perf_counter()
@@ -212,7 +214,8 @@ def prune_low_confidence(threshold: float = None) -> Dict:
     Returns:
         Dictionary with pruning results
     """
-    if not HEALING_ENABLED:
+    # Check if healing is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_HEALING_ENABLED", "true").lower() != "true":
         return {"status": "disabled"}
     
     if threshold is None:
@@ -268,7 +271,8 @@ def heal_missing_links() -> Dict:
     Returns:
         Dictionary with healing results
     """
-    if not HEALING_ENABLED:
+    # Check if healing is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_HEALING_ENABLED", "true").lower() != "true":
         return {"status": "disabled"}
     
     start_time = time.perf_counter()
@@ -347,7 +351,8 @@ def run_full_healing_cycle() -> Dict:
     Returns:
         Dictionary with complete cycle results
     """
-    if not HEALING_ENABLED:
+    # Check if healing is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_HEALING_ENABLED", "true").lower() != "true":
         return {"status": "disabled"}
     
     cycle_start = time.perf_counter()
@@ -400,7 +405,7 @@ def get_healing_stats() -> Dict:
         g = _load_graph()
         
         return {
-            "enabled": HEALING_ENABLED,
+            "enabled": os.environ.get("MEMORYOS_HEALING_ENABLED", "true").lower() == "true",
             "total_nodes": len(g.get("nodes", {})),
             "total_edges": len(g.get("edges", [])),
             "last_heal": g.get("metadata", {}).get("last_heal", "never"),
@@ -413,7 +418,7 @@ def get_healing_stats() -> Dict:
         
     except Exception:
         return {
-            "enabled": HEALING_ENABLED,
+            "enabled": os.environ.get("MEMORYOS_HEALING_ENABLED", "true").lower() == "true",
             "total_nodes": 0,
             "total_edges": 0,
             "last_heal": "error",

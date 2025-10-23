@@ -32,6 +32,9 @@ class TestSelfHealingGraph(unittest.TestCase):
         
         # Set environment variable for test graph file
         os.environ["MEMORYOS_GRAPH_PATH"] = str(self.test_graph_file)
+        
+        # Ensure healing is enabled for most tests
+        os.environ["MEMORYOS_HEALING_ENABLED"] = "true"
     
     def tearDown(self):
         """Clean up test environment"""
@@ -293,6 +296,7 @@ class TestSelfHealingGraph(unittest.TestCase):
     
     def test_healing_disabled(self):
         """Test healing functionality when disabled"""
+        # Set disabled state
         os.environ["MEMORYOS_HEALING_ENABLED"] = "false"
         
         test_data = {
