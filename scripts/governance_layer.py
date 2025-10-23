@@ -31,7 +31,7 @@ SENSITIVE_PATTERNS = [
     re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"),  # Email addresses
     re.compile(r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b"),  # Credit card numbers
     re.compile(r"\b\d{6}[-\s]?\d{7}\b"),  # Korean resident registration numbers
-    re.compile(r"\b[A-Za-z0-9]{8,}\b"),  # Potential passwords or tokens
+    re.compile(r"\b[A-Za-z0-9]{12,}\b"),  # Potential passwords or tokens (longer)
 ]
 
 # Privacy patterns - detect personal information
@@ -199,7 +199,8 @@ def governance_filter(block: str) -> str:
     Returns:
         Filtered text block
     """
-    if not GOVERNANCE_ENABLED or not block:
+    # Check if governance is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_GOVERNANCE_ENABLED", "true").lower() != "true" or not block:
         return block
     
     start_time = time.perf_counter()
@@ -280,7 +281,8 @@ def governance_scan_context(context: str) -> Dict:
     Returns:
         Dictionary with scan results
     """
-    if not GOVERNANCE_ENABLED:
+    # Check if governance is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_GOVERNANCE_ENABLED", "true").lower() != "true":
         return {"status": "disabled", "scanned": False}
     
     start_time = time.perf_counter()
@@ -333,7 +335,7 @@ def get_governance_stats() -> Dict:
     """Get governance system statistics"""
     try:
         return {
-            "enabled": GOVERNANCE_ENABLED,
+            "enabled": os.environ.get("MEMORYOS_GOVERNANCE_ENABLED", "true").lower() == "true",
             "policy_mode": POLICY_MODE,
             "ethics_patterns": len(ETHICS_PATTERNS),
             "sensitive_patterns": len(SENSITIVE_PATTERNS),
@@ -342,7 +344,7 @@ def get_governance_stats() -> Dict:
         }
     except Exception:
         return {
-            "enabled": GOVERNANCE_ENABLED,
+            "enabled": os.environ.get("MEMORYOS_GOVERNANCE_ENABLED", "true").lower() == "true",
             "policy_mode": POLICY_MODE,
             "ethics_patterns": 0,
             "sensitive_patterns": 0,
