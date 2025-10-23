@@ -49,6 +49,11 @@ ADAPTIVE_ON = os.getenv("MEMORYOS_ADAPTIVE_THRESHOLD", "true").lower()=="true"
 MIN_SIM = float(os.getenv("MEMORYOS_SIM_THRESHOLD_MIN", "0.45"))
 MAX_SIM = float(os.getenv("MEMORYOS_SIM_THRESHOLD_MAX", "0.60"))
 
+# Round-5: Memory Aging & Summarization Configuration
+MEMORY_AGING_ENABLED = os.getenv("MEMORYOS_MEMORY_AGING_ENABLED", "true").lower() == "true"
+SUMMARIZATION_ENABLED = os.getenv("MEMORYOS_SUMMARIZATION_ENABLED", "true").lower() == "true"
+STATE_BRIDGE_ENABLED = os.getenv("MEMORYOS_STATE_BRIDGE_ENABLED", "true").lower() == "true"
+
 # Sensitive data masking patterns
 MASK_PATTERNS = [
     (r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', '[EMAIL]'),
@@ -374,9 +379,31 @@ def _hybrid_sort(user_input:str, items:List[Dict], l1_scored:List[Tuple[Dict,flo
     enriched.sort(key=lambda x: x[0], reverse=True)
     return [it for _, it in enriched]
 
+def _fetch_candidates(user_input: str) -> List[Dict]:
+    """Fetch candidate events for context building"""
+    # Get recent events
+    events = get_recent_events(DB_PATH, LAST_MINUTES, LAST_K_EVENTS)
+    if not events:
+        return []
+    
+    # Apply similarity guard with adaptive thresholding
+    if EMBEDDINGS_ENABLED:
+        ok, l1_scored = _similarity_guard(user_input, events)
+        if not ok: 
+            return []
+        
+        # Apply hybrid L0+L1 sorting
+        events = _hybrid_sort(user_input, events, l1_scored)
+    else:
+        # Use L0 filtering only
+        events = filter_relevant_events(events, user_input)
+    
+    return events[:TOP_K_RESULTS]
+
 def build_context_with_embeddings(user_input: str) -> Optional[str]:
     """
-    Enhanced context building with hybrid L0+L1 scoring and adaptive thresholding.
+    Enhanced context building with hybrid L0+L1 scoring, adaptive thresholding,
+    Memory Aging, and Summarization (Round-5).
     
     Args:
         user_input: User's input text
@@ -387,38 +414,47 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
     if not EMBEDDINGS_ENABLED:
         return build_context_l0(user_input)
     
-    # Get recent events
-    events = get_recent_events(DB_PATH, LAST_MINUTES, LAST_K_EVENTS)
-    if not events:
+    # Fetch candidate events
+    items = _fetch_candidates(user_input)
+    if not items:
         return None
     
-    # Apply similarity guard with adaptive thresholding
-    ok, l1_scored = _similarity_guard(user_input, events)
-    if not ok: 
-        return None
+    # Round-5: Apply Memory Aging
+    if MEMORY_AGING_ENABLED:
+        try:
+            from scripts.memory_aging import apply_aging_to_items
+            items = apply_aging_to_items(items, default_weight=1.0)
+        except ImportError:
+            pass  # Graceful fallback if module not available
     
-    # Apply hybrid L0+L1 sorting
-    events = _hybrid_sort(user_input, events, l1_scored)
+    # Round-5: Apply Summarization if needed
+    summarized_context = ""
+    if SUMMARIZATION_ENABLED:
+        try:
+            from scripts.snapshot_summarizer import apply_summary_to_chain, should_compress
+            if should_compress(items):
+                summarized_context = apply_summary_to_chain(items)
+        except ImportError:
+            pass  # Graceful fallback if module not available
     
-    # Take top results
-    relevant_events = events[:TOP_K_RESULTS]
+    # Use summarized context if available, otherwise format individual events
+    if summarized_context:
+        context_body = summarized_context
+    else:
+        # Format individual event summaries
+        context_lines = []
+        for event in items:
+            summary = format_event_summary(event)
+            if summary and len(summary) <= 200:
+                context_lines.append(summary)
+        
+        context_lines = context_lines[:8]
+        if not context_lines:
+            return None
+        
+        context_body = '\n'.join(context_lines)
     
-    if not relevant_events:
-        return None
-    
-    # Format and return context
-    context_lines = []
-    for event in relevant_events:
-        summary = format_event_summary(event)
-        if summary and len(summary) <= 200:
-            context_lines.append(summary)
-    
-    context_lines = context_lines[:8]
-    
-    if not context_lines:
-        return None
-    
-    context_body = '\n'.join(context_lines)
+    # Hard cap on total character count
     if len(context_body) > MAX_CHARS:
         context_body = context_body[:MAX_CHARS] + "..."
     
@@ -427,9 +463,9 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
         import time
         from pathlib import Path
         Path("./logs").mkdir(exist_ok=True)
-        top_sim = l1_scored[0][1] if l1_scored else 0.0
         Path("./logs/memoryos_metrics.log").write_text(
-            f"[{time.time():.0f}] l1=on sim_top={top_sim:.3f}\n", encoding="utf-8"
+            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'}\n", 
+            encoding="utf-8"
         )
     except Exception:
         pass
