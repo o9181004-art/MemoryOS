@@ -329,6 +329,20 @@ def build_context_l0(user_input: str) -> Optional[str]:
         except ImportError:
             pass  # Graceful fallback if module not available
     
+    # Round-11: Apply Governance & Safety Filtering
+    if GOVERNANCE_ENABLED:
+        try:
+            from scripts.governance_layer import governance_filter
+            # Apply governance filtering to each context component
+            if reinjected_context:
+                reinjected_context = governance_filter(reinjected_context)
+            if related_context:
+                related_context = governance_filter(related_context)
+            if insights_context:
+                insights_context = governance_filter(insights_context)
+        except ImportError:
+            pass  # Graceful fallback if module not available
+    
     # Combine contexts
     full_context = context_body
     if reinjected_context:
@@ -337,6 +351,14 @@ def build_context_l0(user_input: str) -> Optional[str]:
         full_context += "\n\n" + related_context
     if insights_context:
         full_context += "\n\n" + insights_context
+    
+    # Apply final governance filter to complete context
+    if GOVERNANCE_ENABLED:
+        try:
+            from scripts.governance_layer import governance_filter
+            full_context = governance_filter(full_context)
+        except ImportError:
+            pass  # Graceful fallback if module not available
     
     return f"[CONTEXT WINDOW]\n{full_context}\n[END CONTEXT]"
 
@@ -577,6 +599,20 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
         except ImportError:
             pass  # Graceful fallback if module not available
     
+    # Round-11: Apply Governance & Safety Filtering
+    if GOVERNANCE_ENABLED:
+        try:
+            from scripts.governance_layer import governance_filter
+            # Apply governance filtering to each context component
+            if reinjected_context:
+                reinjected_context = governance_filter(reinjected_context)
+            if related_context:
+                related_context = governance_filter(related_context)
+            if insights_context:
+                insights_context = governance_filter(insights_context)
+        except ImportError:
+            pass  # Graceful fallback if module not available
+    
     # Combine contexts
     full_context = context_body
     if reinjected_context:
@@ -586,13 +622,21 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
     if insights_context:
         full_context += "\n\n" + insights_context
     
+    # Apply final governance filter to complete context
+    if GOVERNANCE_ENABLED:
+        try:
+            from scripts.governance_layer import governance_filter
+            full_context = governance_filter(full_context)
+        except ImportError:
+            pass  # Graceful fallback if module not available
+    
     # Log telemetry
     try:
         import time
         from pathlib import Path as PathLib
         PathLib("./logs").mkdir(exist_ok=True)
         PathLib("./logs/memoryos_metrics.log").write_text(
-            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'} graph={'on' if GRAPH_ENABLED else 'off'} heal={'on' if HEALING_ENABLED else 'off'} reasoning={'on' if REASONING_ENABLED else 'off'}\n", 
+            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'} graph={'on' if GRAPH_ENABLED else 'off'} heal={'on' if HEALING_ENABLED else 'off'} reasoning={'on' if REASONING_ENABLED else 'off'} governance={'on' if GOVERNANCE_ENABLED else 'off'}\n", 
             encoding="utf-8"
         )
     except Exception:
@@ -621,6 +665,9 @@ _HEAL_INTERVAL = int(os.getenv("MEMORYOS_HEAL_INTERVAL", "100"))
 REASONING_ENABLED = os.getenv("MEMORYOS_REASONING_ENABLED", "true").lower() == "true"
 _INSIGHT_COUNTER = 0
 _INSIGHT_INTERVAL = int(os.getenv("MEMORYOS_INSIGHT_INTERVAL", "50"))
+
+# Round-11: Governance & Safety Configuration
+GOVERNANCE_ENABLED = os.getenv("MEMORYOS_GOVERNANCE_ENABLED", "true").lower() == "true"
 
 def process_llm_proposal(proposal_text: str, user_input: str) -> Tuple[bool, str]:
     """
