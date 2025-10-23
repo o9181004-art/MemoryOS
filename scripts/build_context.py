@@ -474,6 +474,89 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
 
 
 # Main entry point - automatically chooses L0 or L1 based on configuration
+# Round-6: Validator Integration Configuration
+VALIDATOR_ENABLED = os.getenv("MEMORYOS_VALIDATOR_ENABLED", "true").lower() == "true"
+PROPOSAL_PREFIX = os.getenv("MEMORYOS_PROPOSAL_PREFIX", "suggestion:")
+
+def process_llm_proposal(proposal_text: str, user_input: str) -> Tuple[bool, str]:
+    """
+    Process LLM proposal through validator gate.
+    
+    Args:
+        proposal_text: LLM proposal text
+        user_input: Original user input for context
+        
+    Returns:
+        Tuple of (is_approved, reason)
+    """
+    if not VALIDATOR_ENABLED:
+        return False, "Validator disabled"
+    
+    try:
+        from scripts.validator_gate import validate_and_approve
+        
+        # Parse proposal into structured data
+        proposal_data = {
+            "text": proposal_text,
+            "user_input": user_input,
+            "timestamp": datetime.now().isoformat(),
+            "type": "llm_proposal"
+        }
+        
+        # Validate through validator gate
+        is_approved, reason, _ = validate_and_approve(proposal_data)
+        
+        return is_approved, reason
+        
+    except ImportError:
+        return False, "Validator modules not available"
+    except Exception as e:
+        return False, f"Proposal processing error: {str(e)}"
+
+def get_approved_proposals() -> List[Dict]:
+    """
+    Get approved proposals ready for event_chain insertion.
+    
+    Returns:
+        List of approved proposals
+    """
+    if not VALIDATOR_ENABLED:
+        return []
+    
+    try:
+        from scripts.validator_gate import process_approved_proposals
+        return process_approved_proposals()
+    except ImportError:
+        return []
+    except Exception:
+        return []
+
+def detect_proposal_prefix(text: str) -> bool:
+    """
+    Detect if text contains LLM proposal prefix.
+    
+    Args:
+        text: Text to check
+        
+    Returns:
+        True if proposal detected, False otherwise
+    """
+    return text.strip().lower().startswith(PROPOSAL_PREFIX.lower())
+
+def extract_proposal_content(text: str) -> str:
+    """
+    Extract proposal content after prefix.
+    
+    Args:
+        text: Text with proposal prefix
+        
+    Returns:
+        Proposal content without prefix
+    """
+    if detect_proposal_prefix(text):
+        return text[len(PROPOSAL_PREFIX):].strip()
+    return text.strip()
+
 def build_context_main(user_input: str) -> Optional[str]:
     """
     Main context building function with automatic L0/L1 selection.
