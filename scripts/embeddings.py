@@ -50,7 +50,10 @@ def cosine_sim(a:List[float], b:List[float])->float:
 def _stub_embed(text:str)->List[float]:
     # deterministic 64-dim for offline tests
     digest = hashlib.sha256(text.encode("utf-8")).digest()
-    raw = [b/255.0 for b in digest[:64]]
+    # Generate 64 dimensions by repeating and extending the digest
+    raw = []
+    for i in range(64):
+        raw.append(digest[i % len(digest)] / 255.0)
     return _normalize(raw)
 
 def _openai_embed(text:str)->List[float]:
