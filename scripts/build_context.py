@@ -27,7 +27,6 @@ import re
 import time
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime, timedelta
-from pathlib import Path
 
 # Enforce strict read-only mode
 READ_ONLY = True
@@ -221,6 +220,15 @@ def format_event_summary(event: Dict) -> str:
         return f"[{timestamp}] {event_type.upper()}: {mask_sensitive_data(str(summary))}"
 
 
+# Round-12: Meta-Learning Configuration
+META_LEARNING_ENABLED = os.getenv("MEMORYOS_META_LEARNING_ENABLED", "true").lower() == "true"
+
+# Global counters for periodic operations
+_LAST_POLICY_UPDATE = time.time()
+_HEAL_COUNTER = 0
+_INSIGHT_COUNTER = 0
+
+
 def build_context_l0(user_input: str) -> Optional[str]:
     """
     Build context string for LLM prompt injection (L0 - no embeddings) with Reinjection (Round-7), Self-Healing (Round-9), Adaptive Reasoning (Round-10), and Meta-Learning (Round-12).
@@ -235,8 +243,7 @@ def build_context_l0(user_input: str) -> Optional[str]:
     
     # Round-12: Meta-Learning Policy Update
     if META_LEARNING_ENABLED:
-        import time as time_module
-        current_time = time_module.time()
+        current_time = time.time()
         if current_time - _LAST_POLICY_UPDATE > 3600:  # 60 minutes
             try:
                 from scripts.meta_learning import run_meta_learning
@@ -517,8 +524,7 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
     
     # Round-12: Meta-Learning Policy Update
     if META_LEARNING_ENABLED:
-        import time as time_module
-        current_time = time_module.time()
+        current_time = time.time()
         if current_time - _LAST_POLICY_UPDATE > 3600:  # 60 minutes
             try:
                 from scripts.meta_learning import run_meta_learning
@@ -663,13 +669,11 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
     
     # Log telemetry
     try:
-        import time
-        from pathlib import Path as PathLib
-        PathLib("./logs").mkdir(exist_ok=True)
-        PathLib("./logs/memoryos_metrics.log").write_text(
-            f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'} graph={'on' if GRAPH_ENABLED else 'off'} heal={'on' if HEALING_ENABLED else 'off'} reasoning={'on' if REASONING_ENABLED else 'off'} governance={'on' if GOVERNANCE_ENABLED else 'off'} meta={'on' if META_LEARNING_ENABLED else 'off'}\n", 
-            encoding="utf-8"
-        )
+        os.makedirs("./logs", exist_ok=True)
+        with open("./logs/memoryos_metrics.log", "w", encoding="utf-8") as f:
+            f.write(
+                f"[{time.time():.0f}] l1=on aging={'on' if MEMORY_AGING_ENABLED else 'off'} summary={'on' if SUMMARIZATION_ENABLED else 'off'} reinject={'on' if REINJECTION_ENABLED else 'off'} graph={'on' if GRAPH_ENABLED else 'off'} heal={'on' if HEALING_ENABLED else 'off'} reasoning={'on' if REASONING_ENABLED else 'off'} governance={'on' if GOVERNANCE_ENABLED else 'off'} meta={'on' if META_LEARNING_ENABLED else 'off'}\n"
+            )
     except Exception:
         pass
     
@@ -699,10 +703,6 @@ _INSIGHT_INTERVAL = int(os.getenv("MEMORYOS_INSIGHT_INTERVAL", "50"))
 
 # Round-11: Governance & Safety Configuration
 GOVERNANCE_ENABLED = os.getenv("MEMORYOS_GOVERNANCE_ENABLED", "true").lower() == "true"
-
-# Round-12: Meta-Learning Configuration
-META_LEARNING_ENABLED = os.getenv("MEMORYOS_META_LEARNING_ENABLED", "true").lower() == "true"
-_LAST_POLICY_UPDATE = time.time()
 
 def process_llm_proposal(proposal_text: str, user_input: str) -> Tuple[bool, str]:
     """
