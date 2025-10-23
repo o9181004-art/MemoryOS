@@ -9,6 +9,7 @@ if _here not in sys.path: sys.path.append(_here)
 
 from append_event import append_event
 from build_context import build_context
+from validator_gate import validate_llm_suggestion
 
 STOP_FLAG = False
 def _sigint(_, __):
@@ -81,6 +82,9 @@ def main():
                 prompt = f"{context}\n\n[USER INPUT]\n{user_input}"
             else:
                 prompt = user_input
+            
+            # Ensure validator is passive (enforces read-only architecture)
+            assert validate_llm_suggestion({}) is False, "Validator must enforce read-only mode"
             
             payload = {"model": args.model, "prompt": prompt, "stream": False}
             t0 = time.perf_counter()

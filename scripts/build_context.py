@@ -1,4 +1,10 @@
 """
+MemoryOS Context Injector v1.0
+Immutable Architecture – One-Way Feed Design
+Author: LeeSG
+Date: 2025-10-23
+Purpose: Provide read-only contextual recall to LLM without allowing reverse writes.
+
 MemoryOS Context Injector - Low-latency context building for LLM prompts
 
 This module provides intelligent context injection based on recent system events,
@@ -11,6 +17,7 @@ Key Features:
 - Automatic masking of sensitive data
 - Hard caps to prevent prompt bloat
 - Graceful fallback when disabled
+- STRICT READ-ONLY MODE: No writes to event_chain
 """
 
 import os
@@ -20,6 +27,9 @@ import time
 import re
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime, timedelta
+
+# Enforce strict read-only mode
+READ_ONLY = True
 
 
 # Environment configuration with safe defaults
@@ -257,7 +267,7 @@ def build_context_l0(user_input: str) -> Optional[str]:
 
 def cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
     """
-    Calculate cosine similarity between two vectors.
+    Calculate cosine similarity between two vectors using the embeddings module.
     
     Args:
         vec1: First vector
@@ -266,24 +276,29 @@ def cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
     Returns:
         Cosine similarity score (0.0 to 1.0)
     """
-    if not vec1 or not vec2 or len(vec1) != len(vec2):
-        return 0.0
-    
-    import math
-    
-    dot_product = sum(a * b for a, b in zip(vec1, vec2))
-    magnitude1 = math.sqrt(sum(a * a for a in vec1))
-    magnitude2 = math.sqrt(sum(a * a for a in vec2))
-    
-    if magnitude1 == 0 or magnitude2 == 0:
-        return 0.0
-    
-    return dot_product / (magnitude1 * magnitude2)
+    try:
+        from scripts.embeddings import cosine_sim
+        return cosine_sim(vec1, vec2)
+    except ImportError:
+        # Fallback implementation
+        if not vec1 or not vec2 or len(vec1) != len(vec2):
+            return 0.0
+        
+        import math
+        
+        dot_product = sum(a * b for a, b in zip(vec1, vec2))
+        magnitude1 = math.sqrt(sum(a * a for a in vec1))
+        magnitude2 = math.sqrt(sum(a * a for a in vec2))
+        
+        if magnitude1 == 0 or magnitude2 == 0:
+            return 0.0
+        
+        return dot_product / (magnitude1 * magnitude2)
 
 
 def get_embedding(text: str) -> Optional[List[float]]:
     """
-    Get embedding vector for text (placeholder implementation).
+    Get embedding vector for text using the embeddings module.
     
     Args:
         text: Input text
@@ -294,10 +309,12 @@ def get_embedding(text: str) -> Optional[List[float]]:
     if not EMBEDDINGS_ENABLED:
         return None
     
-    # TODO: Implement actual embedding generation
-    # This is a placeholder that would integrate with your embedding service
-    print(f"[ContextInjector] Embedding generation not implemented for: {text[:50]}...")
-    return None
+    try:
+        from scripts.embeddings import get_emb
+        return get_emb(text)
+    except ImportError:
+        print(f"[ContextInjector] Embeddings module not available for: {text[:50]}...")
+        return None
 
 
 def build_context_with_embeddings(user_input: str) -> Optional[str]:
