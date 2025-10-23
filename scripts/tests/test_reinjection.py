@@ -30,6 +30,10 @@ class TestContextReinjection(unittest.TestCase):
         
         # Set environment variable for test cache file
         os.environ["MEMORYOS_APPROVED_CACHE"] = str(self.test_cache_file)
+        
+        # Clear any existing cache file
+        if self.test_cache_file.exists():
+            self.test_cache_file.unlink()
     
     def tearDown(self):
         """Clean up test environment"""
@@ -38,6 +42,10 @@ class TestContextReinjection(unittest.TestCase):
     
     def test_load_approved_empty_file(self):
         """Test loading from non-existent file"""
+        # Ensure file doesn't exist
+        if self.test_cache_file.exists():
+            self.test_cache_file.unlink()
+        
         result = _load_approved()
         self.assertEqual(result, [])
     

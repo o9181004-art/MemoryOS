@@ -20,10 +20,12 @@ REINJECTION_ENABLED = os.environ.get("MEMORYOS_REINJECTION_ENABLED", "true").low
 
 def _load_approved() -> List[Dict]:
     """Load approved memories from cache"""
-    if not CACHE_PATH.exists():
+    cache_path = Path(os.environ.get("MEMORYOS_APPROVED_CACHE", "./data_ollama/approvals.json"))
+    
+    if not cache_path.exists():
         return []
     try:
-        with open(CACHE_PATH, 'r', encoding='utf-8') as f:
+        with open(cache_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
             # Handle both direct list and wrapped format
             if isinstance(data, list):
@@ -173,7 +175,8 @@ def reinject_context(user_input: str) -> str:
     Returns:
         Formatted reinjected context string or empty string
     """
-    if not REINJECTION_ENABLED or not user_input:
+    # Check if reinjection is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_REINJECTION_ENABLED", "true").lower() != "true" or not user_input:
         return ""
     
     start_time = time.perf_counter()
