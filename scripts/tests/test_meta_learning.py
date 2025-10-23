@@ -106,7 +106,7 @@ class TestMetaLearning(unittest.TestCase):
         result = _load_insight_log()
         
         self.assertEqual(len(result), 3)
-        self.assertIn("trending", result[0])
+        self.assertIn("showing higher activity", result[0])
         self.assertIn("inactive", result[1])
     
     def test_analyze_metrics_no_data(self):

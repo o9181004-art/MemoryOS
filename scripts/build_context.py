@@ -235,7 +235,8 @@ def build_context_l0(user_input: str) -> Optional[str]:
     
     # Round-12: Meta-Learning Policy Update
     if META_LEARNING_ENABLED:
-        current_time = time.time()
+        import time as time_module
+        current_time = time_module.time()
         if current_time - _LAST_POLICY_UPDATE > 3600:  # 60 minutes
             try:
                 from scripts.meta_learning import run_meta_learning
@@ -516,7 +517,8 @@ def build_context_with_embeddings(user_input: str) -> Optional[str]:
     
     # Round-12: Meta-Learning Policy Update
     if META_LEARNING_ENABLED:
-        current_time = time.time()
+        import time as time_module
+        current_time = time_module.time()
         if current_time - _LAST_POLICY_UPDATE > 3600:  # 60 minutes
             try:
                 from scripts.meta_learning import run_meta_learning

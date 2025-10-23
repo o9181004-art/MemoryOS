@@ -41,10 +41,11 @@ DEFAULT_POLICY = {
 def _load_metrics(lines: int = 200) -> List[str]:
     """Load recent metrics from log file"""
     try:
-        if not METRICS_PATH.exists():
+        metrics_path = Path(os.environ.get("MEMORYOS_METRICS_PATH", "./logs/memoryos_metrics.log"))
+        if not metrics_path.exists():
             return []
         
-        with open(METRICS_PATH, encoding="utf-8") as f:
+        with open(metrics_path, encoding="utf-8") as f:
             data = f.readlines()
         
         # Get last N lines
@@ -57,10 +58,11 @@ def _load_metrics(lines: int = 200) -> List[str]:
 def _load_audit_log(lines: int = 100) -> List[str]:
     """Load recent audit log entries"""
     try:
-        if not AUDIT_PATH.exists():
+        audit_path = Path(os.environ.get("MEMORYOS_AUDIT_PATH", "./logs/governance_audit.log"))
+        if not audit_path.exists():
             return []
         
-        with open(AUDIT_PATH, encoding="utf-8") as f:
+        with open(audit_path, encoding="utf-8") as f:
             data = f.readlines()
         
         recent_lines = data[-lines:] if len(data) > lines else data
@@ -72,10 +74,11 @@ def _load_audit_log(lines: int = 100) -> List[str]:
 def _load_insight_log(lines: int = 50) -> List[str]:
     """Load recent insight log entries"""
     try:
-        if not INSIGHT_PATH.exists():
+        insight_path = Path(os.environ.get("MEMORYOS_INSIGHT_LOG", "./logs/memoryos_insights.log"))
+        if not insight_path.exists():
             return []
         
-        with open(INSIGHT_PATH, encoding="utf-8") as f:
+        with open(insight_path, encoding="utf-8") as f:
             data = f.readlines()
         
         recent_lines = data[-lines:] if len(data) > lines else data
@@ -229,7 +232,7 @@ def analyze_insights(insight_logs: List[str]) -> Dict:
         pattern_insights = 0
         
         for line in insight_logs:
-            if "trending" in line.lower():
+            if "showing higher activity" in line.lower() or "trending" in line.lower():
                 trend_insights += 1
             if "inactive" in line.lower() or "isolated" in line.lower():
                 anomaly_insights += 1
@@ -373,7 +376,8 @@ def apply_policy(policy: Dict) -> bool:
     """
     try:
         # Save policy to file
-        POLICY_PATH.parent.mkdir(parents=True, exist_ok=True)
+        policy_path = Path(os.environ.get("MEMORYOS_POLICY_PATH", "./data_ollama/meta_policy.json"))
+        policy_path.parent.mkdir(parents=True, exist_ok=True)
         
         policy_with_metadata = {
             "policy": policy,
@@ -385,7 +389,7 @@ def apply_policy(policy: Dict) -> bool:
             }
         }
         
-        with open(POLICY_PATH, "w", encoding="utf-8") as f:
+        with open(policy_path, "w", encoding="utf-8") as f:
             json.dump(policy_with_metadata, f, indent=2, ensure_ascii=False)
         
         # Apply to environment variables
@@ -404,7 +408,8 @@ def run_meta_learning() -> Dict:
     Returns:
         Dictionary with meta-learning results
     """
-    if not META_LEARNING_ENABLED:
+    # Check if meta-learning is enabled (dynamic check)
+    if os.environ.get("MEMORYOS_META_LEARNING_ENABLED", "true").lower() != "true":
         return {"status": "disabled"}
     
     start_time = time.perf_counter()
@@ -474,24 +479,29 @@ def get_meta_learning_stats() -> Dict:
     try:
         # Load current policy
         current_policy = DEFAULT_POLICY.copy()
-        if POLICY_PATH.exists():
+        policy_path = Path(os.environ.get("MEMORYOS_POLICY_PATH", "./data_ollama/meta_policy.json"))
+        if policy_path.exists():
             try:
-                with open(POLICY_PATH, "r", encoding="utf-8") as f:
+                with open(policy_path, "r", encoding="utf-8") as f:
                     policy_data = json.load(f)
                     current_policy = policy_data.get("policy", DEFAULT_POLICY)
             except Exception:
                 pass
         
+        metrics_path = Path(os.environ.get("MEMORYOS_METRICS_PATH", "./logs/memoryos_metrics.log"))
+        audit_path = Path(os.environ.get("MEMORYOS_AUDIT_PATH", "./logs/governance_audit.log"))
+        insight_path = Path(os.environ.get("MEMORYOS_INSIGHT_LOG", "./logs/memoryos_insights.log"))
+        
         return {
-            "enabled": META_LEARNING_ENABLED,
+            "enabled": os.environ.get("MEMORYOS_META_LEARNING_ENABLED", "true").lower() == "true",
             "tuning_mode": TUNING_MODE,
             "latency_target": LATENCY_TARGET,
             "update_interval_min": UPDATE_INTERVAL_MIN,
             "current_policy": current_policy,
-            "policy_file_exists": POLICY_PATH.exists(),
-            "metrics_file_exists": METRICS_PATH.exists(),
-            "audit_file_exists": AUDIT_PATH.exists(),
-            "insight_file_exists": INSIGHT_PATH.exists()
+            "policy_file_exists": policy_path.exists(),
+            "metrics_file_exists": metrics_path.exists(),
+            "audit_file_exists": audit_path.exists(),
+            "insight_file_exists": insight_path.exists()
         }
         
     except Exception:
